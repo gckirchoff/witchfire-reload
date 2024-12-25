@@ -18,8 +18,7 @@ export class Frostbite {
 	startReload = () => {
 		this.reloadingInterval = setInterval(() => {
 			if (this.progress >= this.maxDuration) {
-				clearInterval(this.reloadingInterval);
-				this.progress = 0;
+				this.reset();
 				return;
 			}
 			this.progress++;
@@ -30,5 +29,23 @@ export class Frostbite {
 		if (!this.reloadingInterval) {
 			return;
 		}
+		const percentThrough = this.progress / this.maxDuration;
+		const bounds = this.calculateBounds();
+
+		const isWellTimed =
+			percentThrough > bounds.lowerWellTimed && percentThrough < bounds.upperWellTimed;
+
+		console.log(isWellTimed ? 'HOORAY' : 'bad');
+		this.reset();
+	};
+
+	private calculateBounds = () => ({
+		lowerWellTimed: 0.5 - this.wellTimedWindow / 2,
+		upperWellTimed: 0.5 + this.wellTimedWindow / 2
+	});
+
+	private reset = () => {
+		clearInterval(this.reloadingInterval);
+		this.progress = 0;
 	};
 }
