@@ -1,5 +1,21 @@
 <script lang="ts">
+	const handleStartReload = () => {
+		console.log('RELOADING');
+	};
+
+	const handleKeyDown = (
+		event: KeyboardEvent & {
+			currentTarget: EventTarget & Document;
+		}
+	) => {
+		if (event.key.toLowerCase() !== 'r') {
+			return;
+		}
+		handleStartReload();
+	};
 </script>
+
+<svelte:document on:touchstart={handleStartReload} on:keydown={handleKeyDown} />
 
 <main>
 	<div class="headers">
@@ -20,13 +36,13 @@
 		text-align: center;
 	}
 
-    h1 {
-        font-size: 5rem;
-    }
+	h1 {
+		font-size: 5rem;
+	}
 
-    h3 {
-        font-size: 3rem;
-    }
+	h3 {
+		font-size: 3rem;
+	}
 
 	.bar {
 		background-color: blue;
