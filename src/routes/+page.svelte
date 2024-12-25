@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import { Frostbite } from './logic.svelte';
 
 	const frostbite = new Frostbite();
@@ -22,13 +23,15 @@
 		<h1>Frostbite Reload</h1>
 		<h3>Press R to reload</h3>
 	</div>
-	<div class="bar">
-		<div
-			class="well-timed-window"
-			style="--well-timed-window: {frostbite.wellTimedWindow * 100}%"
-		></div>
-		<div class="slider" style="--left: {frostbite.progress * 100}%"></div>
-	</div>
+	{#if frostbite.state === 'reloading'}
+		<div class="bar" transition:fade={{ duration: 90 }}>
+			<div
+				class="well-timed-window"
+				style="--well-timed-window: {frostbite.wellTimedWindow * 100}%"
+			></div>
+			<div class="slider" style="--left: {frostbite.progress * 100}%"></div>
+		</div>
+	{/if}
 </main>
 
 <style>
