@@ -12,17 +12,25 @@
 <style>
 	main {
 		min-height: inherit;
-		padding-top: 30vh;
+		padding-top: 35vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 3rem;
+		gap: 5rem;
 		text-align: center;
 	}
 
+    h1 {
+        font-size: 5rem;
+    }
+
+    h3 {
+        font-size: 3rem;
+    }
+
 	.bar {
 		background-color: blue;
-		width: min(30rem, 90%);
-		height: 1.5rem;
+		width: min(50rem, 90%);
+		height: 2rem;
 	}
 </style>

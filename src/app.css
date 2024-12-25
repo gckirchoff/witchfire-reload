@@ -14,4 +14,8 @@ body {
 	min-height: 100vh;
 	color: #efeeec;
 	font-size: 1.6rem;
+	font-family: 'Germania One', serif;
+	font-weight: 400;
+	font-style: normal;
+	letter-spacing: 0.2rem;
 }
