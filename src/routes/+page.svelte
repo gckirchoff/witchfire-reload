@@ -3,9 +3,6 @@
 
 	const frostbite = new Frostbite();
 
-	// $inspect(frostbite.progress);
-	$inspect(frostbite.progress);
-
 	const handleKeyDown = (
 		event: KeyboardEvent & {
 			currentTarget: EventTarget & Document;
@@ -25,7 +22,13 @@
 		<h1>Frostbite Reload</h1>
 		<h3>Press R to reload</h3>
 	</div>
-	<div class="bar"></div>
+	<div class="bar">
+		<div
+			class="well-timed-window"
+			style="--well-timed-window: {frostbite.wellTimedWindow * 100}%"
+		></div>
+		<div class="slider" style="--left: {frostbite.progress * 100}%"></div>
+	</div>
 </main>
 
 <style>
@@ -49,7 +52,26 @@
 
 	.bar {
 		background-color: blue;
-		width: min(50rem, 90%);
+		width: min(70rem, 90%);
 		height: 2rem;
+		position: relative;
+	}
+
+	.well-timed-window {
+		width: var(--well-timed-window);
+		height: 2rem;
+		background-color: cyan;
+		position: absolute;
+		top: 0;
+		left: calc(50% - var(--well-timed-window) * 0.5);
+	}
+
+	.slider {
+		height: 100%;
+		width: 0.5rem;
+		background-color: white;
+		position: absolute;
+		top: 0;
+		left: var(--left);
 	}
 </style>

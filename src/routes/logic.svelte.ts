@@ -3,21 +3,20 @@ interface FrostbiteParams {
 	wellTimedFraction?: number;
 }
 
+type State = 'idle' | 'reloading';
+
 export class Frostbite {
+	state = $state<State>('idle');
 	private animationFrame = $state(0);
 	private startTime = $state(0);
 	private elapsedTime = $state(0);
 
-	private maxDuration;
-	private wellTimedWindow;
+	wellTimedWindow: number;
+	private maxDuration: number;
 
 	constructor({ maxDuration = 1000, wellTimedFraction = 0.2 }: FrostbiteParams = {}) {
 		this.maxDuration = maxDuration;
 		this.wellTimedWindow = wellTimedFraction;
-	}
-
-	get isReloading() {
-		return !!this.animationFrame;
 	}
 
 	get progress() {
@@ -25,7 +24,7 @@ export class Frostbite {
 	}
 
 	handleReload = () => {
-		if (!this.isReloading) {
+		if (this.state === 'idle') {
 			this.startReload();
 		} else {
 			this.timedPress();
@@ -33,8 +32,10 @@ export class Frostbite {
 	};
 
 	private startReload = () => {
+		this.reset();
+		this.state = 'reloading';
 		const loop = (t: number) => {
-			if (this.startTime === 0) {
+			if (this.state === 'reloading' && this.startTime === 0) {
 				this.startTime = t;
 			}
 			this.elapsedTime = t - this.startTime;
@@ -51,11 +52,9 @@ export class Frostbite {
 		if (!this.animationFrame) {
 			return;
 		}
-		const percentThrough = this.elapsedTime / this.maxDuration;
 		const bounds = this.calculateBounds();
-
 		const isWellTimed =
-			percentThrough > bounds.lowerWellTimed && percentThrough < bounds.upperWellTimed;
+			this.progress > bounds.lowerWellTimed && this.progress < bounds.upperWellTimed;
 
 		console.log(isWellTimed ? 'HOORAY' : 'bad');
 		this.reset();
@@ -68,6 +67,7 @@ export class Frostbite {
 
 	private reset = () => {
 		cancelAnimationFrame(this.animationFrame);
+		this.state = 'idle';
 		this.animationFrame = 0;
 		this.startTime = 0;
 		this.elapsedTime = 0;
