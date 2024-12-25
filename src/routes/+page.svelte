@@ -4,7 +4,7 @@
 	const frostbite = new Frostbite();
 
 	// $inspect(frostbite.progress);
-	$inspect(frostbite.isReloading);
+	$inspect(frostbite.progress);
 
 	const handleKeyDown = (
 		event: KeyboardEvent & {

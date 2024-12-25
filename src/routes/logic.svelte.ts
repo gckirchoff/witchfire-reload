@@ -20,6 +20,10 @@ export class Frostbite {
 		return !!this.animationFrame;
 	}
 
+	get progress() {
+		return this.elapsedTime / this.maxDuration;
+	}
+
 	handleReload = () => {
 		if (!this.isReloading) {
 			this.startReload();
