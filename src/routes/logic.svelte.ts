@@ -4,32 +4,50 @@ interface FrostbiteParams {
 }
 
 export class Frostbite {
-	progress = $state(0);
-	reloadingInterval = $state(0);
+	private animationFrame = $state(0);
+	private startTime = $state(0);
+	private elapsedTime = $state(0);
 
-	maxDuration = 1000;
-	wellTimedWindow = 0.2;
+	private maxDuration;
+	private wellTimedWindow;
 
 	constructor({ maxDuration = 1000, wellTimedFraction = 0.2 }: FrostbiteParams = {}) {
 		this.maxDuration = maxDuration;
 		this.wellTimedWindow = wellTimedFraction;
 	}
 
-	startReload = () => {
-		this.reloadingInterval = setInterval(() => {
-			if (this.progress >= this.maxDuration) {
+	get isReloading() {
+		return !!this.animationFrame;
+	}
+
+	handleReload = () => {
+		if (!this.isReloading) {
+			this.startReload();
+		} else {
+			this.timedPress();
+		}
+	};
+
+	private startReload = () => {
+		const loop = (t: number) => {
+			if (this.startTime === 0) {
+				this.startTime = t;
+			}
+			this.elapsedTime = t - this.startTime;
+			if (this.elapsedTime > this.maxDuration) {
 				this.reset();
 				return;
 			}
-			this.progress++;
-		}, 1);
+			requestAnimationFrame(loop);
+		};
+		this.animationFrame = requestAnimationFrame(loop);
 	};
 
-	timedPress = () => {
-		if (!this.reloadingInterval) {
+	private timedPress = () => {
+		if (!this.animationFrame) {
 			return;
 		}
-		const percentThrough = this.progress / this.maxDuration;
+		const percentThrough = this.elapsedTime / this.maxDuration;
 		const bounds = this.calculateBounds();
 
 		const isWellTimed =
@@ -45,7 +63,9 @@ export class Frostbite {
 	});
 
 	private reset = () => {
-		clearInterval(this.reloadingInterval);
-		this.progress = 0;
+		cancelAnimationFrame(this.animationFrame);
+		this.animationFrame = 0;
+		this.startTime = 0;
+		this.elapsedTime = 0;
 	};
 }

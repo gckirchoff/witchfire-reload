@@ -1,7 +1,10 @@
 <script lang="ts">
-	const handleStartReload = () => {
-		console.log('RELOADING');
-	};
+	import { Frostbite } from './logic.svelte';
+
+	const frostbite = new Frostbite();
+
+	// $inspect(frostbite.progress);
+	$inspect(frostbite.isReloading);
 
 	const handleKeyDown = (
 		event: KeyboardEvent & {
@@ -11,11 +14,11 @@
 		if (event.key.toLowerCase() !== 'r') {
 			return;
 		}
-		handleStartReload();
+		frostbite.handleReload();
 	};
 </script>
 
-<svelte:document on:touchstart={handleStartReload} on:keydown={handleKeyDown} />
+<svelte:document on:touchstart={frostbite.handleReload} on:keydown={handleKeyDown} />
 
 <main>
 	<div class="headers">
