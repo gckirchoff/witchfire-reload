@@ -28,15 +28,19 @@
 			{#if frostbite.mysterium === 2}
 				<div
 					class="perfect-timed-window"
+					class:perfectly-timed={frostbite.reloadResult === 'perfect'}
 					style="--well-timed-window: {frostbite.wellTimedWindow *
-						100}%; --perfect-timed-window: {frostbite.perfectWindow * 100}%"
+						100}%; --perfect-timed-window: {frostbite.perfectWindow * 100}%;"
 				></div>
 			{/if}
 			<div
 				class="well-timed-window"
+				class:well-timed={frostbite.reloadResult === 'well-timed'}
 				style="--well-timed-window: {frostbite.wellTimedWindow * 100}%"
 			></div>
-			<div class="slider" style="--left: {frostbite.progress * 100}%"></div>
+			{#if !frostbite.disabled}
+				<div class="slider" style="--left: {frostbite.progress * 100}%"></div>
+			{/if}
 		</div>
 	{/if}
 </main>
@@ -61,7 +65,7 @@
 	}
 
 	.bar {
-		background-color: blue;
+		background-color: brown;
 		width: min(70rem, 90%);
 		height: 2rem;
 		position: relative;
@@ -70,20 +74,34 @@
 	.well-timed-window {
 		width: var(--well-timed-window);
 		height: 2rem;
-		background-color: cyan;
+		background-color: rgb(0, 0, 255);
 		position: absolute;
 		top: 0;
 		left: calc(50% - var(--well-timed-window) * 0.5);
+		transition: box-shadow ease-in-out 200ms;
 	}
 
 	.perfect-timed-window {
 		height: 2rem;
-		background-color: red;
+		background-color: aqua;
 		border-right: 1px solid green;
 		position: absolute;
 		top: 0;
 		width: var(--perfect-timed-window);
 		left: calc(50% - (var(--well-timed-window) * 0.5) - var(--perfect-timed-window));
+		transition: box-shadow ease-in-out 200ms;
+	}
+
+	.well-timed {
+		box-shadow:
+			0px 20px 5px rgba(42, 42, 242, 0.6),
+			0px -20px 5px rgba(42, 42, 242, 0.6);
+	}
+
+	.perfectly-timed {
+		box-shadow:
+			0px 20px 5px rgba(0, 255, 255, 0.5),
+			0px -20px 5px rgba(0, 255, 255, 0.5);
 	}
 
 	.slider {

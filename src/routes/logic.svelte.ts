@@ -4,10 +4,13 @@ interface FrostbiteParams {
 	startingPerfectTimedWindow?: number;
 }
 
-type State = 'idle' | 'reloading' | 'well-timed' | 'perfect';
+type State = 'idle' | 'reloading';
+
+type ReloadResult = null | 'perfect' | 'well-timed';
 
 export class Frostbite {
 	state = $state<State>('idle');
+	reloadResult = $state<ReloadResult>(null);
 	mysterium = $state(2);
 	streak = $state(0);
 	perfectWindow = $state(0);
@@ -77,10 +80,8 @@ export class Frostbite {
 		const isWellTimed =
 			this.progress > bounds.lowerWellTimed && this.progress < bounds.upperWellTimed;
 
-		const result = isPerfectlyTimed ? 'PERFECT' : isWellTimed ? 'GOOD' : 'BAD';
-
-		this.adjustPerfectWindow(result);
-
+		this.reloadResult = isPerfectlyTimed ? 'perfect' : isWellTimed ? 'well-timed' : null;
+		this.adjustPerfectWindow();
 		this.reset();
 	};
 
@@ -90,8 +91,8 @@ export class Frostbite {
 		lowerPerfectlyTimed: 0.5 - this.wellTimedWindow / 2 - this.perfectWindow
 	});
 
-	private adjustPerfectWindow = (result: string) => {
-		if (result === 'PERFECT') {
+	private adjustPerfectWindow = () => {
+		if (this.reloadResult === 'perfect') {
 			this.perfectWindow *= 0.7;
 		} else {
 			this.perfectWindow = this.startingPerfectTimedWindow;
@@ -108,6 +109,7 @@ export class Frostbite {
 		setTimeout(() => {
 			this.showBar = false;
 			this.disabled = false;
+			this.reloadResult = null;
 		}, 1000);
 	};
 }
