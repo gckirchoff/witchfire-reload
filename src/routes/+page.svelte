@@ -23,7 +23,7 @@
 		<h1>Frostbite Reload</h1>
 		<h3>Press R to reload</h3>
 	</div>
-	{#if true || frostbite.state === 'reloading'}
+	{#if frostbite.showBar}
 		<div class="bar" transition:fade={{ duration: 90 }}>
 			{#if frostbite.mysterium === 2}
 				<div
