@@ -1,22 +1,31 @@
 interface FrostbiteParams {
 	maxDuration?: number;
 	wellTimedFraction?: number;
+	perfectWindow?: number;
 }
 
 type State = 'idle' | 'reloading';
 
 export class Frostbite {
 	state = $state<State>('idle');
+	mysterium = $state(2);
+	streak = $state(0);
 	private animationFrame = $state(0);
 	private startTime = $state(0);
 	private elapsedTime = $state(0);
-
+	
+	perfectWindow: number;
 	wellTimedWindow: number;
 	private maxDuration: number;
 
-	constructor({ maxDuration = 1000, wellTimedFraction = 0.2 }: FrostbiteParams = {}) {
+	constructor({
+		maxDuration = 1000,
+		wellTimedFraction = 0.2,
+		perfectWindow = 0.1
+	}: FrostbiteParams = {}) {
 		this.maxDuration = maxDuration;
 		this.wellTimedWindow = wellTimedFraction;
+		this.perfectWindow = perfectWindow;
 	}
 
 	get progress() {
@@ -53,16 +62,23 @@ export class Frostbite {
 			return;
 		}
 		const bounds = this.calculateBounds();
+		const isPerfectlyTimed =
+			this.mysterium === 2 &&
+			this.progress > bounds.lowerPerfectlyTimed &&
+			this.progress < bounds.lowerWellTimed;
+
 		const isWellTimed =
 			this.progress > bounds.lowerWellTimed && this.progress < bounds.upperWellTimed;
 
-		console.log(isWellTimed ? 'HOORAY' : 'bad');
+		const result = isPerfectlyTimed ? 'PERFECT' : isWellTimed ? 'GOOD' : 'BAD';
+		console.log(result);
 		this.reset();
 	};
 
 	private calculateBounds = () => ({
 		lowerWellTimed: 0.5 - this.wellTimedWindow / 2,
-		upperWellTimed: 0.5 + this.wellTimedWindow / 2
+		upperWellTimed: 0.5 + this.wellTimedWindow / 2,
+		lowerPerfectlyTimed: 0.5 - this.wellTimedWindow / 2 - this.perfectWindow
 	});
 
 	private reset = () => {

@@ -23,8 +23,15 @@
 		<h1>Frostbite Reload</h1>
 		<h3>Press R to reload</h3>
 	</div>
-	{#if frostbite.state === 'reloading'}
+	{#if true || frostbite.state === 'reloading'}
 		<div class="bar" transition:fade={{ duration: 90 }}>
+			{#if frostbite.mysterium === 2}
+				<div
+					class="perfect-timed-window"
+					style="--well-timed-window: {frostbite.wellTimedWindow *
+						100}%; --perfect-timed-window: {frostbite.perfectWindow * 100}%"
+				></div>
+			{/if}
 			<div
 				class="well-timed-window"
 				style="--well-timed-window: {frostbite.wellTimedWindow * 100}%"
@@ -67,6 +74,16 @@
 		position: absolute;
 		top: 0;
 		left: calc(50% - var(--well-timed-window) * 0.5);
+	}
+
+	.perfect-timed-window {
+		height: 2rem;
+		background-color: red;
+		border-right: 1px solid green;
+		position: absolute;
+		top: 0;
+		width: var(--perfect-timed-window);
+		left: calc(50% - (var(--well-timed-window) * 0.5) - var(--perfect-timed-window));
 	}
 
 	.slider {
