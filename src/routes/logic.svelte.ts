@@ -72,7 +72,7 @@ export class Frostbite {
 		const isPerfectlyTimed =
 			this.mysterium === 2 &&
 			this.progress > bounds.lowerPerfectlyTimed &&
-			this.progress < bounds.lowerWellTimed;
+			this.progress <= bounds.lowerWellTimed;
 
 		const isWellTimed =
 			this.progress > bounds.lowerWellTimed && this.progress < bounds.upperWellTimed;
