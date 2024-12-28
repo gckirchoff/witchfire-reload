@@ -24,7 +24,11 @@
 		<h3>Press R to reload</h3>
 	</div>
 	{#if frostbite.showBar}
-		<div class="bar" transition:fade={{ duration: 90 }}>
+		<div
+			class="bar"
+			class:missed={frostbite.reloadResult === 'missed'}
+			transition:fade={{ duration: 90 }}
+		>
 			{#if frostbite.mysterium === 2}
 				<div
 					class="perfect-timed-window"
@@ -71,6 +75,10 @@
 		position: relative;
 	}
 
+	.missed {
+		animation: horizontal-shake 300ms;
+	}
+
 	.well-timed-window {
 		width: var(--well-timed-window);
 		height: 2rem;
@@ -111,5 +119,23 @@
 		position: absolute;
 		top: 0;
 		left: var(--left);
+	}
+
+	@keyframes horizontal-shake {
+		0% {
+			transform: translateX(0);
+		}
+		25% {
+			transform: translateX(5px);
+		}
+		50% {
+			transform: translateX(-5px);
+		}
+		75% {
+			transform: translateX(5px);
+		}
+		100% {
+			transform: translateX(0);
+		}
 	}
 </style>

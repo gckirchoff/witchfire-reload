@@ -6,7 +6,7 @@ interface FrostbiteParams {
 
 type State = 'idle' | 'reloading';
 
-type ReloadResult = null | 'perfect' | 'well-timed';
+type ReloadResult = null | 'perfect' | 'well-timed' | 'missed';
 
 export class Frostbite {
 	state = $state<State>('idle');
@@ -77,7 +77,7 @@ export class Frostbite {
 		const isWellTimed =
 			this.progress > bounds.lowerWellTimed && this.progress < bounds.upperWellTimed;
 
-		this.reloadResult = isPerfectlyTimed ? 'perfect' : isWellTimed ? 'well-timed' : null;
+		this.reloadResult = isPerfectlyTimed ? 'perfect' : isWellTimed ? 'well-timed' : 'missed';
 		this.adjustPerfectWindow();
 		this.reset();
 	};
