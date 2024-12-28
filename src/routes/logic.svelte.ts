@@ -68,9 +68,6 @@ export class Frostbite {
 	};
 
 	private timedPress = () => {
-		if (!this.animationFrame) {
-			return;
-		}
 		const bounds = this.calculateBounds();
 		const isPerfectlyTimed =
 			this.mysterium === 2 &&
@@ -102,7 +99,6 @@ export class Frostbite {
 	private reset = () => {
 		cancelAnimationFrame(this.animationFrame);
 		this.state = 'idle';
-		this.animationFrame = 0;
 		this.startTime = 0;
 		this.elapsedTime = 0;
 		this.disabled = true;
